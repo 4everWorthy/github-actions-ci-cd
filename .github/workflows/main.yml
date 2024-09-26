@@ -13,20 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set execute permission for Maven Wrapper
+        run: chmod +x ./mvnw
+
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '17' # Java version you're using
-          distribution: 'temurin' # Use a compatible distribution (e.g., 'adopt', 'zulu', 'temurin')
+          java-version: '17'
+          distribution: 'temurin'
 
       - name: Install dependencies
-        run: ./mvnw install # Ensure `./mvnw` exists, or use `mvn` if not using the wrapper
+        run: ./mvnw install # Ensure mvnw has execute permissions
 
       - name: Run tests
-        run: ./mvnw test # Ensure `./mvnw` exists, or use `mvn` if not using the wrapper
+        run: ./mvnw test
 
       - name: Generate build artifacts
-        run: ./mvnw package # Ensure `./mvnw` exists, or use `mvn` if not using the wrapper
+        run: ./mvnw package
 
   deploy:
     runs-on: ubuntu-latest
