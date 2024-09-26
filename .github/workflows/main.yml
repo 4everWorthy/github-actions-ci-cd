@@ -48,9 +48,9 @@ jobs:
         run: |
           zip -r app.zip .
           aws elasticbeanstalk create-application-version \
-            --application-name my-app \
-            --version-label v1 \
-            --source-bundle S3Bucket=my-bucket,S3Key=app.zip
+          --application-name my-app \
+          --version-label v1 \
+          --source-bundle S3Bucket=elasticbeanstalk-us-east-1-888577045495,S3Key=app.zip
           aws elasticbeanstalk update-environment \
             --application-name my-app \
             --environment-name my-env \
