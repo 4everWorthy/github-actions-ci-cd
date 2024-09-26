@@ -23,7 +23,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Install dependencies
-        run: ./mvnw install # Ensure mvnw has execute permissions
+        run: ./mvnw install
 
       - name: Run tests
         run: ./mvnw test
@@ -38,11 +38,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set execute permission for AWS CLI
+        run: chmod +x /usr/local/bin/aws
+
       - name: Deploy to AWS Elastic Beanstalk
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
+          echo "Zipping application..."
           zip -r app.zip .
-          aws elasticbeanstalk create-application-version --application-name my-app --version-label v1 --source-bundle S3Bucket=my-bucket,S3Key=app.zip
-          aws elasticbeanstalk update-environment --application-name my-app --environment-name my-env --version-label v1
+          echo "Uploading new version to Elastic Beanstalk..."
+          aws elasticbeanstalk create-application-version --application-name my-app --version-label v1 --source-bundle S3Bucket=my-bucket,S3Key=app.zip --debug
+          echo "Updating environment..."
+          aws elasticbeanstalk update-environment --application-name my-app --environment-name my-env --version-label v1 --debug
