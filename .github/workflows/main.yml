@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Node.js # Added to resolve Node.js deprecation warning
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # or '20' depending on your project requirements
+
       - name: Set execute permission for Maven Wrapper
         run: chmod +x ./mvnw
 
@@ -38,18 +43,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set execute permission for AWS CLI
-        run: chmod +x /usr/local/bin/aws
+      - name: Set up AWS CLI
+        run: sudo apt-get install -y awscli
 
       - name: Deploy to AWS Elastic Beanstalk
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-1'
         run: |
           zip -r app.zip .
-          aws elastic beanstalk update-environment \
+          aws elasticbeanstalk update-environment \
           --application-name github-actions-ci-cd \
           --environment-name my-env \
           --version-label v1
           
           --source-bundle S3Bucket=elastic beanstalk-us-east-1-888577045495,S3Key=app.zip
+          aws elasticbeanstalk update-environment \
+             --application-name github-actions-ci-cd \
+                      --environment-name my-env \
+                      --version-label v1
