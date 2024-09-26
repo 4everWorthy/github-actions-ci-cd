@@ -46,9 +46,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          echo "Zipping application..."
           zip -r app.zip .
-          echo "Uploading new version to Elastic Beanstalk..."
-          aws elasticbeanstalk create-application-version --application-name my-app --version-label v1 --source-bundle S3Bucket=my-bucket,S3Key=app.zip --debug
-          echo "Updating environment..."
-          aws elasticbeanstalk update-environment --application-name my-app --environment-name my-env --version-label v1 --debug
+          aws elasticbeanstalk create-application-version \
+            --application-name my-app \
+            --version-label v1 \
+            --source-bundle S3Bucket=my-bucket,S3Key=app.zip
+          aws elasticbeanstalk update-environment \
+            --application-name my-app \
+            --environment-name my-env \
+            --version-label v1
