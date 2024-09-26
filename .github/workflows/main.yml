@@ -57,10 +57,10 @@ jobs:
 
           aws elasticbeanstalk create-application-version \
             --application-name github-actions-ci-cd \
-            --version-label v1 \
+            --version-label v2 \
             --source-bundle S3Bucket=elasticbeanstalk-us-east-1-888577045495,S3Key=app.zip
 
           aws elasticbeanstalk update-environment \
             --application-name github-actions-ci-cd \
             --environment-name my-env \
-            --version-label v1
+            --version-label v2
