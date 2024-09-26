@@ -11,29 +11,29 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 # Updated to use the latest version
+        uses: actions/checkout@v3
 
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '17' # Change to your version as needed
-          distribution: 'adopt' # Specify Java distribution
+          java-version: '17' # Java version you're using
+          distribution: 'temurin' # Use a compatible distribution (e.g., 'adopt', 'zulu', 'temurin')
 
       - name: Install dependencies
-        run: ./mvnw install
+        run: ./mvnw install # Ensure `./mvnw` exists, or use `mvn` if not using the wrapper
 
       - name: Run tests
-        run: ./mvnw test
+        run: ./mvnw test # Ensure `./mvnw` exists, or use `mvn` if not using the wrapper
 
       - name: Generate build artifacts
-        run: ./mvnw package
+        run: ./mvnw package # Ensure `./mvnw` exists, or use `mvn` if not using the wrapper
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 # Updated to use the latest version
+        uses: actions/checkout@v3
 
       - name: Deploy to AWS Elastic Beanstalk
         env:
