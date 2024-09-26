@@ -43,8 +43,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up AWS CLI
-        run: sudo apt-get install -y awscli
+      - name: Set execute permission for AWS CLI
+        run: chmod +x /usr/local/bin/aws
 
       - name: Deploy to AWS Elastic Beanstalk
         env:
@@ -61,6 +61,6 @@ jobs:
           --source-bundle S3Bucket=elastic beanstalk-us-east-1-888577045495,S3Key=app.zip
           aws elasticbeanstalk update-environment \
              --application-name github-actions-ci-cd \
-                      --environment-name my-env \
-                      --version-label v1
+             --environment-name my-env \
+             --version-label v1
           
