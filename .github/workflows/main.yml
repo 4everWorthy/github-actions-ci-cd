@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11' # Change to your version as needed
+          distribution: 'adopt' # Or 'zulu', 'temurin', etc., depending on your preference
 
       - name: Install dependencies
         run: ./mvnw install
