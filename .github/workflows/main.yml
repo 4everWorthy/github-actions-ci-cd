@@ -53,14 +53,14 @@ jobs:
           AWS_REGION: 'us-east-1'
         run: |
           zip -r app.zip .
+          aws s3 cp app.zip s3://elasticbeanstalk-us-east-1-888577045495/app.zip
+
+          aws elasticbeanstalk create-application-version \
+            --application-name github-actions-ci-cd \
+            --version-label v1 \
+            --source-bundle S3Bucket=elasticbeanstalk-us-east-1-888577045495,S3Key=app.zip
+
           aws elasticbeanstalk update-environment \
-          --application-name github-actions-ci-cd \
-          --environment-name my-env \
-          --version-label v1
-          
-          --source-bundle S3Bucket=elastic beanstalk-us-east-1-888577045495,S3Key=app.zip
-          aws elasticbeanstalk update-environment \
-             --application-name github-actions-ci-cd \
-             --environment-name my-env \
-             --version-label v1
-          
+            --application-name github-actions-ci-cd \
+            --environment-name my-env \
+            --version-label v1
