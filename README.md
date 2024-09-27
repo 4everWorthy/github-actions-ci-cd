@@ -1,7 +1,10 @@
+
+---
+
 # GitHub Actions CI/CD Workflow for Java App Deployment on AWS Elastic Beanstalk
 
 ## Project Overview
-This project demonstrates the use of GitHub Actions to implement Continuous Integration (CI) and Continuous Deployment (CD) for a Java application. The application is deployed to AWS Elastic Beanstalk, and the CI/CD workflows are fully automated. 
+This project demonstrates the use of GitHub Actions to implement Continuous Integration (CI) and Continuous Deployment (CD) for a Java application. The application is deployed to AWS Elastic Beanstalk, and the CI/CD workflows are fully automated.
 
 The workflow is triggered on every push to the `main` branch, ensuring that code changes are tested and deployed automatically. This project uses **Java 17** and **Node.js** to handle the build and deployment tasks.
 
@@ -43,10 +46,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up Node.js # Added to resolve Node.js deprecation warning
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '16' # or '20' depending on your project requirements
 
       - name: Set execute permission for Maven Wrapper
         run: chmod +x ./mvnw
@@ -80,62 +83,80 @@ jobs:
           AWS_REGION: 'us-east-1'
         run: |
           zip -r app.zip .
+          aws s3 cp app.zip s3://elasticbeanstalk-us-east-1-888577045495/app.zip
           aws elasticbeanstalk create-application-version \
             --application-name github-actions-ci-cd \
-            --environment-name my-env \
-            --version-label v1 \
+            --version-label v2 \  # Updated to v2
             --source-bundle S3Bucket=elasticbeanstalk-us-east-1-888577045495,S3Key=app.zip
+          aws elasticbeanstalk update-environment \
+            --application-name github-actions-ci-cd \
+            --environment-name my-env \
+            --version-label v2  # Updated to v2
 ```
 
 ## Configuration & Dependencies
 
 ### Tools & Technologies Used:
-- **GitHub Actions**: To automate the CI/CD pipeline.
-- **Java 17**: As the language of the application.
-- **Node.js**: Required for handling certain build steps.
-- **Maven**: For dependency management and project packaging.
-- **AWS Elastic Beanstalk**: For hosting and deploying the application.
-- **AWS CLI**: To interact with AWS services from the GitHub workflow.
+- **GitHub Actions**: Automates the CI/CD pipeline.
+- **Java 17**: Language used for the application.
+- **Node.js**: Handles build steps like setting up the environment.
+- **Maven**: Manages project dependencies and packaging.
+- **AWS Elastic Beanstalk**: Hosts and deploys the application.
+- **AWS CLI**: Interacts with AWS services from the GitHub workflow.
 
-### AWS Setup
+### AWS Setup:
 - **AWS Access Key & Secret Key**: Stored as GitHub Secrets (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) to securely authenticate with AWS.
-- **Elastic Beanstalk Environment**: Deployed to `my-env` in the `us-east-1` region.
+- **Elastic Beanstalk Environment**: The application is deployed to the environment `my-env` in the `us-east-1` region.
+
+## How to Run Locally
+To run the application locally for development purposes:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/your-repo.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd your-repo
+   ```
+3. Build the project:
+   ```bash
+   ./mvnw package
+   ```
+4. Run the application:
+   ```bash
+   java -jar target/app.jar
+   ```
+
+## Troubleshooting
+
+### Common Issues and Fixes
+
+1. **Incorrect Application Version Error**:
+   If you encounter the error related to an incorrect application version, such as `Expected version "Sample" (deployment 1). Application update is aborting`, this typically means Elastic Beanstalk is looking for the wrong version of the app.
+
+   **Solution**:
+   - Change the version label in your workflow `.yml` file from `v1` to `v2` or any other unique version label.
+   - Commit and push the changes, then re-deploy using the updated version label.
+
+   Example:
+   ```yaml
+   run: |
+     zip -r app.zip .
+     aws s3 cp app.zip s3://elasticbeanstalk-us-east-1-888577045495/app.zip
+     aws elasticbeanstalk create-application-version \
+       --application-name github-actions-ci-cd \
+       --version-label v2 \
+       --source-bundle S3Bucket=elasticbeanstalk-us-east-1-888577045495,S3Key=app.zip
+     aws elasticbeanstalk update-environment \
+       --application-name github-actions-ci-cd \
+       --environment-name my-env \
+       --version-label v2
+   ```
 
 ## How It Works
-
 1. **Push Changes**: Whenever changes are pushed to the `main` branch, the CI workflow kicks off.
 2. **Build and Test**: GitHub Actions builds the app, runs tests, and packages the app.
 3. **Deploy**: After a successful build, the app is automatically deployed to AWS Elastic Beanstalk.
 4. **Logs & Notifications**: View workflow logs in the GitHub Actions tab and monitor deployment status in the AWS Elastic Beanstalk console.
 
-## How to Run Locally
-If you want to run the application locally for development purposes:
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/your-repo.git
-    ```
-2. Navigate to the project directory:
-    ```bash
-    cd your-repo
-    ```
-3. Build the project:
-    ```bash
-    ./mvnw package
-    ```
-4. Run the application:
-    ```bash
-    java -jar target/app.jar
-    ```
-
-## Troubleshooting
-If you encounter any issues with deployment, check the following:
-
-- Ensure your AWS Access Key and Secret Key are correctly stored in GitHub Secrets.
-- Verify that the Elastic Beanstalk environment name and S3 bucket details are correct in the `main.yml` file.
-- Check the logs in the GitHub Actions tab for any specific errors.
-
-## Conclusion
-This project demonstrates how to automate the CI/CD process using GitHub Actions and AWS Elastic Beanstalk. By automating these tasks, developers can ensure that code changes are rigorously tested and deployed seamlessly, streamlining the development lifecycle.
-
-```
