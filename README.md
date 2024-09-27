@@ -128,14 +128,6 @@ If you want to run the application locally for development purposes:
     java -jar target/app.jar
     ```
 
-## Screenshots & Example Output
-
-### GitHub Actions Workflow Run
-![Workflow Success](C:\Users\kjaso\OneDrive\Desktop\CTACT\JAVA_FS103\github-actions-ci-cd\screenshots\AWS Environment overview.png)
-
-### AWS Elastic Beanstalk Application
-![AWS Elastic Beanstalk](C:\Users\kjaso\OneDrive\Desktop\CTACT\JAVA_FS103\github-actions-ci-cd\screenshots\GitHub Actions Workflow.png)
-
 ## Troubleshooting
 If you encounter any issues with deployment, check the following:
 
