@@ -131,10 +131,10 @@ If you want to run the application locally for development purposes:
 ## Screenshots & Example Output
 
 ### GitHub Actions Workflow Run
-![Workflow Success]("C:\Users\kjaso\OneDrive\Desktop\CTACT\JAVA_FS103\github-actions-ci-cd\screenshots\GitHub%20Actions%20Workflow.png")
+![Workflow Success](C:\Users\kjaso\OneDrive\Desktop\CTACT\JAVA_FS103\github-actions-ci-cd\screenshots\AWS Environment overview.png)
 
 ### AWS Elastic Beanstalk Application
-![AWS Elastic Beanstalk]("C:\Users\kjaso\OneDrive\Desktop\CTACT\JAVA_FS103\github-actions-ci-cd\screenshots\AWS%20Environment%20overview.png")
+![AWS Elastic Beanstalk](C:\Users\kjaso\OneDrive\Desktop\CTACT\JAVA_FS103\github-actions-ci-cd\screenshots\GitHub Actions Workflow.png)
 
 ## Troubleshooting
 If you encounter any issues with deployment, check the following:
